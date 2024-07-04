@@ -7,5 +7,5 @@ from .models import Event
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['day', 'start_time', 'end_time', 'notes']
+    list_display = [field.name for field in Event._meta.fields]
 

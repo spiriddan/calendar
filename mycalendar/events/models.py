@@ -3,45 +3,65 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.core.exceptions import ValidationError
+
+
 # from django.core.urlresolvers import reverse
 
 
 class Event(models.Model):
-    day = models.DateField(u'Day of the event', help_text=u'Day of the event')
-    start_time = models.TimeField(u'Starting time', help_text=u'Starting time')
-    end_time = models.TimeField(u'Final time', help_text=u'Final time')
-    notes = models.TextField(u'Textual Notes', help_text=u'Textual Notes', blank=True, null=True)
+    day = models.DateField(u'Дата консультации', help_text=u'Дата консультации')
+    FIO = models.CharField(u'ФИО', help_text=u'ФИО', blank=True, null=True, max_length=255)
+    phone = models.CharField(u'Телефон', help_text=u'Телефон', blank=True, null=True, max_length=255)
+    email = models.EmailField(u'Электронная почта', help_text=u'Электронная почта', blank=True, null=True)
+    is_marked_10 = models.BooleanField(default=False, verbose_name='10:00-11:00')
+    is_marked_11 = models.BooleanField(default=False, verbose_name='11:00-12:00')
+    is_marked_12 = models.BooleanField(default=False, verbose_name='12:00-13:00')
+    is_marked_13 = models.BooleanField(default=False, verbose_name='13:00-14:00')
+    is_marked_14 = models.BooleanField(default=False, verbose_name='14:00-15:00')
+    is_marked_16 = models.BooleanField(default=False, verbose_name='16:00-17:00')
 
     class Meta:
-        verbose_name = u'Scheduling'
-        verbose_name_plural = u'Scheduling'
+        verbose_name = u'Запись на консультацию'
+        verbose_name_plural = u'Записи на консультации'
 
-    def check_overlap(self, fixed_start, fixed_end, new_start, new_end):
-        overlap = False
-        if new_start == fixed_end or new_end == fixed_start:  # edge case
-            overlap = False
-        elif (new_start >= fixed_start and new_start <= fixed_end) or (
-                new_end >= fixed_start and new_end <= fixed_end):  # innner limits
-            overlap = True
-        elif new_start <= fixed_start and new_end >= fixed_end:  # outter limits
-            overlap = True
+    def validate_unique(self, exclude=None):
+        super(Event, self).validate_unique(exclude)
 
-        return overlap
+        if Event.objects.filter(day=self.day, is_marked_10=True).exists():
+            if self.is_marked_10:
+                raise ValidationError(u'Запись на консультацию уже существует')
+        if Event.objects.filter(day=self.day, is_marked_11=True).exists():
+            if self.is_marked_11:
+                raise ValidationError(u'Запись на консультацию уже существует')
+        if Event.objects.filter(day=self.day, is_marked_12=True).exists():
+            if self.is_marked_12:
+                raise ValidationError(u'Запись на консультацию уже существует')
+        if Event.objects.filter(day=self.day, is_marked_13=True).exists():
+            if self.is_marked_13:
+                raise ValidationError(u'Запись на консультацию уже существует')
+        if Event.objects.filter(day=self.day, is_marked_14=True).exists():
+            if self.is_marked_14:
+                raise ValidationError(u'Запись на консультацию уже существует')
+        if Event.objects.filter(day=self.day, is_marked_16=True).exists():
+            if self.is_marked_16:
+                raise ValidationError(u'Запись на консультацию уже существует')
 
-    # def get_absolute_url(self):
-    #     url = reverse('admin:%s_%s_change' % (self._meta.app_label, self._meta.model_name), args=[self.id])
-    #     return u'<a href="%s">%s</a>' % (url, str(self.start_time))
-
-    def clean(self):
-        if self.end_time <= self.start_time:
-            raise ValidationError('Ending times must after starting times')
-
-        events = Event.objects.filter(day=self.day)
-        if events.exists():
-            for event in events:
-                if self.check_overlap(event.start_time, event.end_time, self.start_time, self.end_time):
-                    raise ValidationError(
-                        'There is an overlap with another event: ' + str(event.day) + ', ' + str(
-                            event.start_time) + '-' + str(event.end_time))
-
-
+# i have my django model
+# ```python
+# class Event(models.Model):
+#     day = models.DateField(u'Дата консультации', help_text=u'Дата консультации')
+#     FIO = models.CharField(u'ФИО', help_text=u'ФИО', blank=True, null=True, max_length=255)
+#     phone = models.CharField(u'Телефон', help_text=u'Телефон', blank=True, null=True, max_length=255)
+#     email = models.EmailField(u'Электронная почта', help_text=u'Электронная почта', blank=True, null=True)
+#     is_marked_10 = models.BooleanField(default=False, verbose_name='10:00-11:00')
+#     is_marked_11 = models.BooleanField(default=False, verbose_name='11:00-12:00')
+#     is_marked_12 = models.BooleanField(default=False, verbose_name='12:00-13:00')
+#     is_marked_13 = models.BooleanField(default=False, verbose_name='13:00-14:00')
+#     is_marked_14 = models.BooleanField(default=False, verbose_name='14:00-15:00')
+#     is_marked_16 = models.BooleanField(default=False, verbose_name='16:00-17:00')
+#
+#     class Meta:
+#         verbose_name = u'Запись на консультацию'
+#         verbose_name_plural = u'Записи на консультации'
+# ```
+# how to vrite validator that refuse adding model with the same day and same is_marked turned on
