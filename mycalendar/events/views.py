@@ -9,7 +9,7 @@ from .models import *
 class Appointment:
     start = 0
     end = 0
-
+    title = ''
     def __init__(self, ev: Event):
         self.start = datetime.datetime.combine(ev.day, datetime.datetime.min.time()) # datetime.date
         if ev.is_marked_10:
@@ -26,6 +26,7 @@ class Appointment:
             self.start += datetime.timedelta(hours=16)
         self.end = self.start + datetime.timedelta(hours=1)
 
+        self.title = f'{self.start.time()} - {self.end.time()}'
         self.start = self.start.timestamp()
         self.end = self.end.timestamp()
 
