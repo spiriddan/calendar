@@ -61,17 +61,17 @@ var defaults = {
 	// locale
 	isRTL: false,
 	firstDay: 0,
-	monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+	monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
 	monthNamesShort: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-	dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+	dayNames: ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'],
 	dayNamesShort: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
 	buttonText: {
 		prev: "<span class='fc-text-arrow'>‹</span>",
 		next: "<span class='fc-text-arrow'>›</span>",
 		prevYear: "<span class='fc-text-arrow'>«</span>",
 		nextYear: "<span class='fc-text-arrow'>»</span>",
-		today: 'today',
-		month: 'month',
+		today: 'сегодня',
+		month: 'месяц',
 		week: 'week',
 		day: 'day'
 	},
