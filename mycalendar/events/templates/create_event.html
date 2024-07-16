@@ -1,0 +1,87 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" type="image/jpg" href="{% static 'icons/calendar.jpg' %}">
+    <title>Создать запись</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
+</head>
+<body>
+    <h1>Создать запись:  </h1>
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="FIO">ФИО:</label>
+         {% if form.FIO.errors %}
+            <ul>
+            {% for error in form.FIO.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            </ul>
+         {% endif %}
+        <input type="text" id="FIO" name="FIO"><br><br>
+    
+        <label for="group">Группа:</label>
+        <input type="text" id="group" name="group"><br><br>
+    
+        <label for="phone">Телефон:</label>
+        {% if form.phone.errors %}
+            <ul>
+            {% for error in form.phone.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            </ul>
+         {% endif %}
+        <input type="text" id="phone" name="phone"><br><br>
+
+        <label for="email">Электронная почта:</label>
+        {% if form.email.errors %}
+            <ul>
+            {% for error in form.email.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            </ul>
+         {% endif %}
+        <input type="email" id="email" name="email"><br><br>
+
+        <label for="is_marked_10">
+            <input type="checkbox" id="is_marked_10" name="is_marked_10">10:00-11:00
+        </label><br>
+
+        <label for="is_marked_11">
+            <input type="checkbox" id="is_marked_11" name="is_marked_11">11:00-12:00
+        </label><br>
+
+        <label for="is_marked_12">
+            <input type="checkbox" id="is_marked_12" name="is_marked_12">12:00-13:00
+        </label><br>
+
+        <label for="is_marked_13">
+            <input type="checkbox" id="is_marked_13" name="is_marked_13">13:00-14:00
+        </label><br>
+
+        <label for="is_marked_14">
+            <input type="checkbox" id="is_marked_14" name="is_marked_14">14:00-15:00
+        </label><br>
+
+        <label for="is_marked_16">
+            <input type="checkbox" id="is_marked_16" name="is_marked_16">16:00-17:00
+        </label><br><br>
+        
+        {% if form.is_marked_10.errors %}
+            <ul>
+            {% for error in form.is_marked_10.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            </ul>
+         {% endif %}
+    
+        {{ exists }}
+        
+        <input type="submit" value="Сохранить">
+        
+       
+    </form>
+</body>
+</html>
